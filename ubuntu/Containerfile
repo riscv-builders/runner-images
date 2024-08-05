@@ -1,0 +1,24 @@
+FROM scratch as ubuntu-core
+ARG RELEASE
+LABEL org.opencontainers.image.ref.name="ubuntu"
+LABEL org.opencontainers.image.version=$RELEASE
+LABEL org.opencontainers.image.url=https://github.com/riscv-builders/container-images
+LABEL org.opencontainers.image.authors=riscv-builders
+LABEL org.opencontainers.image.licenses=BSD-3-Clause
+ADD ubuntu-$RELEASE-oci-riscv64-root.tar.gz /
+
+FROM ubuntu-core as ubuntu-base
+ARG RELEASE
+COPY ubuntu-$RELEASE.sources /etc/apt/sources.list.d/ubuntu.sources
+ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+RUN apt-get update -yq
+RUN apt-get upgrade -yq
+RUN apt-get install ca-certificates -yq --no-install-recommends
+
+FROM ubuntu-base
+ARG RELEASE
+RUN mkdir -p /etc/skel
+COPY scripts /etc/skel
+RUN /etc/skel/install-$RELEASE.sh
+RUN /etc/skel/cleanup.sh
+RUN rm -rf /etc/skel
