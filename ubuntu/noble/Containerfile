@@ -29,7 +29,4 @@ RUN apt-get install ghc cabal-install -yq --no-install-recommends
 RUN apt-get install php -yq --no-install-recommends
 RUN apt-get install openjdk-17-jre openjdk-17-jdk -yq --no-install-recommends
 
-RUN mkdir -p /etc/skel
-COPY scripts /etc/skel
-RUN /etc/skel/cleanup.sh
-RUN rm -rf /etc/skel
+RUN apt-get clean
