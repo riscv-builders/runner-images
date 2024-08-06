@@ -1,4 +1,4 @@
-FROM scratch as ubuntu-core
+FROM scratch as rootfs
 ARG RELEASE
 LABEL org.opencontainers.image.ref.name="ubuntu"
 LABEL org.opencontainers.image.version=$RELEASE
@@ -6,20 +6,17 @@ LABEL org.opencontainers.image.url=https://github.com/riscv-builders/task-images
 LABEL org.opencontainers.image.source https://github.com/riscv-builders/task-images
 LABEL org.opencontainers.image.authors=riscv-builders
 LABEL org.opencontainers.image.licenses=BSD-3-Clause
+LABEL org.opencontainers.image.description="Default image for riscv-builders"
 ADD ubuntu-$RELEASE-oci-riscv64-root.tar.gz /
 
-FROM ubuntu-core as ubuntu-base
+FROM rootfs as ubuntu-base
 ARG RELEASE
-COPY ubuntu-$RELEASE.sources /etc/apt/sources.list.d/ubuntu.sources
+COPY ubuntu.sources /etc/apt/sources.list.d/ubuntu.sources
 ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
 RUN apt-get update -yq
 RUN apt-get upgrade -yq
-RUN apt-get install ca-certificates -yq --no-install-recommends
-
-FROM ubuntu-base
-RUN mkdir -p /etc/skel
-COPY scripts /etc/skel
-
+RUN apt-get install ca-certificates curl -yq --no-install-recommends
 RUN apt-get install git git-lfs -yq --no-install-recommends
 RUN apt-get install build-essential -yq --no-install-recommends
 RUN apt-get install cmake ninja-build -yq --no-install-recommends
@@ -32,5 +29,7 @@ RUN apt-get install ghc cabal-install -yq --no-install-recommends
 RUN apt-get install php -yq --no-install-recommends
 RUN apt-get install openjdk-17-jre openjdk-17-jdk -yq --no-install-recommends
 
+RUN mkdir -p /etc/skel
+COPY scripts /etc/skel
 RUN /etc/skel/cleanup.sh
 RUN rm -rf /etc/skel
