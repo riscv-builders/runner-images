@@ -1,4 +1,11 @@
-FROM ghcr.io/riscv-builders/ubuntu:latest
+FROM ghcr.io/riscv-builders/ubuntu:noble
+LABEL org.opencontainers.image.ref.name="action-runner"
+LABEL org.opencontainers.image.source=https://github.com/riscv-builders/task-images
+LABEL org.opencontainers.image.url=https://github.com/riscv-builders/task-images
+LABEL org.opencontainers.image.authors=riscv-builders
+LABEL org.opencontainers.image.licenses=BSD-3-Clause
+LABEL org.opencontainers.image.description="Default action runner image for riscv-builders"
+
 ARG RELEASE
 
 WORKDIR /root
