@@ -15,7 +15,7 @@ ghcr.io/riscv-builders/ubuntu:latest
 ```
 
 Installed software:
-
+```
 apt 2.7.14build2
 base-files 13ubuntu10
 base-passwd 3.6.3build1
@@ -131,3 +131,4 @@ tar 1.35+dfsg-3build1
 ubuntu-keyring 2023.11.28.1
 util-linux 2.39.3-9ubuntu6
 zlib1g 1:1.3.dfsg-3.1ubuntu2
+```
